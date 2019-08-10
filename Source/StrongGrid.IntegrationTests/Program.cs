@@ -93,6 +93,7 @@ namespace StrongGrid.IntegrationTests
 				Categories,
 				ContactsAndCustomFields,
 				EmailActivities,
+				EmailValidation,
 				GlobalSuppressions,
 				InvalidEmails,
 				IpAddresses,
@@ -1335,6 +1336,15 @@ namespace StrongGrid.IntegrationTests
 			// REQUEST THE ACTIVITIES WITH A GIVEN 'UNIQUE ARG'
 			activities = await client.EmailActivities.SearchAsync(new SearchCriteriaUniqueArgEqual("some_value_specific_to_this_person", "ABC_123"), maxNumberOfActivities, cancellationToken).ConfigureAwait(false);
 			await log.WriteLineAsync($"There are {activities.Count()} email activities with the 'some_value_specific_to_this_person' unique arg.").ConfigureAwait(false);
+		}
+
+		private static async Task EmailValidation(IClient client, TextWriter log, CancellationToken cancellationToken)
+		{
+			await log.WriteLineAsync("\n***** EMAIL VALIDATION *****\n").ConfigureAwait(false);
+
+			// VALIDATE
+			var validationResult = await client.EmailValidation.ValidateAsync("john.doe@gmial.com", "signup", cancellationToken).ConfigureAwait(false);
+			await log.WriteLineAsync($"Email validation verdict: {validationResult.Verdict}").ConfigureAwait(false);
 		}
 
 		// to get your public IP address we loop through an array
